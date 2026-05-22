@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}회원가입 · 6/45 Lotto{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <h3 class="mb-3">회원가입</h3>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label">{{ field.label }}</label>
+          <input type="{{ field.field.widget.input_type|default:'text' }}"
+                 name="{{ field.name }}"
+                 class="form-control {% if field.errors %}is-invalid{% endif %}"
+                 value="{{ field.value|default:'' }}">
+          {% if field.help_text %}
+            <div class="form-text">{{ field.help_text|safe }}</div>
+          {% endif %}
+          {% for err in field.errors %}
+            <div class="invalid-feedback d-block">{{ err }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <button class="btn btn-primary">가입하기</button>
+      <a href="{% url 'accounts:login' %}" class="ms-2">로그인</a>
+    </form>
+    <p class="text-muted mt-3 small">가입 시 잔액 10,000원이 지급됩니다.</p>
+  </div>
+</div>
+{% endblock %}

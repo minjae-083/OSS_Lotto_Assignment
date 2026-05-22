@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}내 복권 · 6/45 Lotto{% endblock %}
+{% block content %}
+<h3>내 복권</h3>
+{% if tickets %}
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th>회차</th>
+      <th>번호</th>
+      <th>구매방식</th>
+      <th>구매일시</th>
+      <th>결과</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in tickets %}
+    <tr>
+      <td>{{ t.draw.round_no }}</td>
+      <td>
+        {% for n in t.numbers %}
+          <span class="badge bg-secondary">{{ n }}</span>
+        {% endfor %}
+      </td>
+      <td>{{ t.get_pick_type_display }}</td>
+      <td><small class="text-muted">{{ t.purchased_at|date:"Y-m-d H:i" }}</small></td>
+      <td>
+        {% if t.rank is None %}
+          <span class="text-muted">추첨 전</span>
+        {% elif t.rank == 0 %}
+          꽝
+        {% else %}
+          <span class="badge bg-success">{{ t.rank }}등</span>
+          {{ t.prize }}원
+        {% endif %}
+      </td>
+      <td><a href="{% url 'lotto:check' t.id %}" class="btn btn-sm btn-outline-primary">상세</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p class="text-muted">아직 구매한 복권이 없습니다. <a href="{% url 'lotto:buy' %}">구매하러 가기</a></p>
+{% endif %}
+{% endblock %}
