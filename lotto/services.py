@@ -32,6 +32,13 @@ def generate_auto_numbers():
     return sorted(random.sample(range(1, 46), 6))
 
 
+def create_next_draw():
+    """가장 큰 회차 다음 번호로 OPEN 상태의 회차를 생성."""
+    last = Draw.objects.order_by("-round_no").first()
+    next_no = (last.round_no + 1) if last else 1
+    return Draw.objects.create(round_no=next_no)
+
+
 def validate_numbers(numbers):
     if len(numbers) != 6:
         raise ValidationError("번호는 6개여야 합니다.")

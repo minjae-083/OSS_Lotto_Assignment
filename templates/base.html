@@ -13,6 +13,9 @@
     <div class="navbar-nav me-auto">
       <a class="nav-link" href="{% url 'lotto:buy' %}">구매</a>
       <a class="nav-link" href="{% url 'lotto:my_tickets' %}">내 복권</a>
+      {% if user.is_staff %}
+        <a class="nav-link text-warning" href="{% url 'admin_panel:sales' %}">관리</a>
+      {% endif %}
     </div>
     <div class="navbar-nav">
       {% if user.is_authenticated %}

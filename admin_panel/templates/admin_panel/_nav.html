@@ -1,0 +1,5 @@
+<nav class="nav nav-pills mb-3">
+  <a class="nav-link {% if request.resolver_match.url_name == 'sales' %}active{% endif %}" href="{% url 'admin_panel:sales' %}">판매 내역</a>
+  <a class="nav-link {% if request.resolver_match.url_name == 'draw' %}active{% endif %}" href="{% url 'admin_panel:draw' %}">추첨</a>
+  <a class="nav-link {% if request.resolver_match.url_name == 'winners' %}active{% endif %}" href="{% url 'admin_panel:winners' %}">당첨자</a>
+</nav>
