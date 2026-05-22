@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}당첨 확인 · 6/45 Lotto{% endblock %}
+{% block content %}
+<h3>{{ ticket.draw.round_no }}회차 복권</h3>
+
+<div class="card my-3">
+  <div class="card-body">
+    <p>내 번호:
+      {% for n in ticket.numbers %}
+        <span class="badge bg-secondary fs-6">{{ n }}</span>
+      {% endfor %}
+      <span class="text-muted small ms-2">({{ ticket.get_pick_type_display }} · {{ ticket.purchased_at|date:"Y-m-d H:i" }})</span>
+    </p>
+
+    {% if ticket.draw.status == "OPEN" %}
+      <div class="alert alert-info mb-0">아직 추첨 전입니다.</div>
+    {% else %}
+      <p>당첨번호:
+        {% for n in ticket.draw.winning_numbers %}
+          <span class="badge bg-primary fs-6">{{ n }}</span>
+        {% endfor %}
+        + <span class="badge bg-warning text-dark fs-6">{{ ticket.draw.bonus }}</span>
+      </p>
+      {% if ticket.rank == 0 %}
+        <div class="alert alert-secondary mb-0">아쉽지만 꽝입니다.</div>
+      {% else %}
+        <div class="alert alert-success mb-0">
+          <strong>{{ ticket.rank }}등 당첨!</strong>
+          상금 {{ ticket.prize }}원이 잔액에 추가되었습니다.
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<a href="{% url 'lotto:my_tickets' %}" class="btn btn-outline-secondary">목록으로</a>
+{% endblock %}

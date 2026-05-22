@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}복권 구매 · 6/45 Lotto{% endblock %}
+{% block content %}
+<h3>{{ open_draw.round_no }}회차 복권 구매</h3>
+<p class="text-muted">1장 1,000원 · 현재 잔액 {{ user.balance }}원</p>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">자동</h5>
+        <p class="text-muted small">랜덤으로 6개 번호를 뽑아 구매합니다.</p>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="pick_type" value="AUTO">
+          <button class="btn btn-success">자동으로 1장 구매</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">수동</h5>
+        <p class="text-muted small">1~45 중 서로 다른 6개를 직접 입력하세요.</p>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="pick_type" value="MANUAL">
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>
+          {% endif %}
+          <div class="row g-2">
+            {% for field in form %}
+              <div class="col-4">
+                <input type="number" name="{{ field.name }}" min="1" max="45"
+                       class="form-control {% if field.errors %}is-invalid{% endif %}"
+                       placeholder="{{ field.label }}" value="{{ field.value|default:'' }}">
+              </div>
+            {% endfor %}
+          </div>
+          <button class="btn btn-primary mt-3">수동으로 구매</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

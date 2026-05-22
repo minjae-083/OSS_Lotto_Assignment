@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}6/45 Lotto{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">판매 중인 회차</h5>
+        {% if open_draw %}
+          <p class="display-6 mb-3">{{ open_draw.round_no }}회차</p>
+          <a href="{% url 'lotto:buy' %}" class="btn btn-primary">구매하러 가기</a>
+        {% else %}
+          <p class="text-muted">현재 판매 중인 회차가 없습니다.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">최근 추첨 결과</h5>
+        {% for draw in recent_closed %}
+          <div class="mb-2">
+            <strong>{{ draw.round_no }}회차</strong>
+            <span class="text-muted small">({{ draw.draw_date|date:"Y-m-d H:i" }})</span><br>
+            번호:
+            {% for n in draw.winning_numbers %}
+              <span class="badge bg-secondary">{{ n }}</span>
+            {% endfor %}
+            + <span class="badge bg-warning text-dark">{{ draw.bonus }}</span>
+          </div>
+        {% empty %}
+          <p class="text-muted">아직 추첨된 회차가 없습니다.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

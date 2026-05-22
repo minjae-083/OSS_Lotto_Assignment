@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}6/45 Lotto{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{% url 'lotto:home' %}">6/45 Lotto</a>
+    <div class="navbar-nav me-auto">
+      <a class="nav-link" href="{% url 'lotto:buy' %}">구매</a>
+      <a class="nav-link" href="{% url 'lotto:my_tickets' %}">내 복권</a>
+    </div>
+    <div class="navbar-nav">
+      {% if user.is_authenticated %}
+        <span class="navbar-text me-3">
+          {{ user.username }} · 잔액 <strong>{{ user.balance|default:0 }}원</strong>
+        </span>
+        <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-outline-light" type="submit">로그아웃</button>
+        </form>
+      {% else %}
+        <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+        <a class="nav-link" href="{% url 'accounts:signup' %}">회원가입</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<main class="container my-4">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>
